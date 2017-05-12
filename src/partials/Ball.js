@@ -37,13 +37,32 @@ reset() {
       this.vy = -this.vy;
     }
   }
+  paddleCollision(player1, player2) {
+    //checking if moving toward the right, execute only the right side; vice-versa
+    if (this.vx > 0){
+      //check for collision on player 2
+      let paddle = player2.coordinates(player2.x, player2.y, player2.width, player2.height);
+      let [leftX, rightX, topY, bottomY] = paddle;
+      if (
+        this.x + this.radius >= leftX //the right edge of the ball is >= left edge of the paddle
+        && this.x + this.radius <= rightX  //&& the right edge of the ball <= right edge of the paddle
+        && this.y + this.radius >= topY //&& the ball Y >= the top edge of the paddle
+        && this.y <= bottomY  //&& the ball is <= the bottom edge of the paddle
+      ) {
+        this.vx = -this.vx;
+      }
+    } else {
+      // check for collision on player 1
+    }
+  }
   
 
-  render(svg) {
+  render(svg, player1, player2) {
     this.x += this.vx;
     this.y += this.vy;
 
     this.wallCollision();
+    this.paddleCollision(player1, player2);
 
     let circle = document.createElementNS(SVG_NS, 'circle');
 		circle.setAttributeNS(null, 'r', this.radius);
