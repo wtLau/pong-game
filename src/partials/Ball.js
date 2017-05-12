@@ -52,6 +52,16 @@ reset() {
         this.vx = -this.vx;
       }
     } else {
+      let paddle = player1.coordinates(player1.x, player1.y, player1.width, player1.height);
+      let [leftX, rightX, topY, bottomY] = paddle;
+      if (
+        this.x - this.radius >= leftX 
+        && this.x - this.radius <= rightX 
+        && this.y + this.radius >= topY
+        && this.y <= bottomY
+      ) {
+        this.vx= -this.vx
+      }
       // check for collision on player 1
     }
   }
