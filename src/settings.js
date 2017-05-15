@@ -6,6 +6,7 @@ export const KEYS = {
   up: 'ArrowUp',       // player 2 up key
   down: 'ArrowDown',  
   spaceBar: ' ', // we'll use this later...
+  b: 'b',
 }
 
 

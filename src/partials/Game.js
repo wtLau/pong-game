@@ -3,6 +3,7 @@ import Board from './Board';
 import Paddle from './Paddle';
 import Ball from './Ball';
 import Score from './Score';
+import Obstacles from './Obstacles';
 
 export default class Game {
 
@@ -42,8 +43,23 @@ export default class Game {
 			this.width,
 			this.height);
 
-		this.player1Score = new Score(this.width / 2 - 50, 30, 30)
-		this.player2Score = new Score(this.width / 2 + 25, 30, 30)
+		this.ball2 =new Ball (
+			this.radius*4,
+			this.width,
+			this.height,
+
+			document.addEventListener('keydown', event => {
+			if (event.key === KEYS.b) {
+				this.addBall = !this.addBall;
+			}
+		})
+		);
+
+		this.player1Score = new Score(this.width / 2 - 50, 50, 50, 'red')
+		this.player2Score = new Score(this.width / 2 + 25, 50, 50, 'blue')
+
+		this.obstacles = new Obstacles(80, 80, this.width/2 - 40, this.height/2 - 40,
+		)
 
 		document.addEventListener('keydown', event => {
 			if (event.key === KEYS.spaceBar) {
@@ -71,5 +87,9 @@ export default class Game {
 		this.player1Score.render(svg, this.player1.score);
 		this.player2Score.render(svg, this.player2.score);
 		this.ball.render(svg, this.player1, this.player2);
+		this.obstacles.render(svg);
+		if (this.addBall) {
+			return this.ball2.render(svg, this.player1, this.player2);
+		}
 	}
 }

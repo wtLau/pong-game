@@ -39,6 +39,7 @@ export default class Ball {
       this.vy = -this.vy;
     }
   }
+  
   paddleCollision(player1, player2) {
     //checking if moving toward the right, execute only the right side; vice-versa
     if (this.vx > 0) {
@@ -81,6 +82,7 @@ export default class Ball {
 
     this.wallCollision();
     this.paddleCollision(player1, player2);
+
 
     let circle = document.createElementNS(SVG_NS, 'circle');
     circle.setAttributeNS(null, 'r', this.radius);

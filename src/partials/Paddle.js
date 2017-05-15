@@ -32,10 +32,15 @@ export default class Paddle {
 
   up() {
     this.y = Math.max(0,this.y-this.speed);
+    this.height = this.height+4;
   }
 
   down() {
     this.y = Math.min(this.boardHeight- this.height,  this.y+this.speed);
+    if (this.height > 20) {
+     this.height = this.height-4;
+    }
+      
   }
 
   render(svg) {
