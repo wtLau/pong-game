@@ -1,11 +1,12 @@
 import { SVG_NS } from '../settings';
 
 export default class Ball {
-  constructor(radius, boardWidth, boardHeight) {
+  constructor(radius, boardWidth, boardHeight, direction, color) {
     this.radius = radius;
     this.boardWidth = boardWidth;
     this.boardHeight = boardHeight;
-    this.direction = 1;
+    this.direction = direction;
+    this.color = color
     this.ping1 = new Audio('public/sounds/pong-01.wav');
     this.ping3 = new Audio('public/sounds/pong-03.wav');
 
@@ -39,7 +40,7 @@ export default class Ball {
       this.vy = -this.vy;
     }
   }
-  
+
   paddleCollision(player1, player2) {
     //checking if moving toward the right, execute only the right side; vice-versa
     if (this.vx > 0) {
@@ -86,7 +87,7 @@ export default class Ball {
 
     let circle = document.createElementNS(SVG_NS, 'circle');
     circle.setAttributeNS(null, 'r', this.radius);
-    circle.setAttributeNS(null, 'fill', '#FFFFFF');
+    circle.setAttributeNS(null, 'fill', this.color);
     circle.setAttributeNS(null, 'cx', this.x);
     circle.setAttributeNS(null, 'cy', this.y);
     svg.appendChild(circle)

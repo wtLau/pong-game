@@ -32,7 +32,9 @@ export default class Paddle {
 
   up() {
     this.y = Math.max(0,this.y-this.speed);
+    if (this.y > this.height) {
     this.height = this.height+4;
+    }
   }
 
   down() {

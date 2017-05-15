@@ -7,6 +7,8 @@ export default class Score {
     this.size = size;
     this.color = color;
   }
+
+  
   render(svg, score) {
 
     let text = document.createElementNS(SVG_NS, 'text');

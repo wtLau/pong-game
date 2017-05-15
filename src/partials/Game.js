@@ -41,12 +41,16 @@ export default class Game {
 		this.ball = new Ball(
 			this.radius,
 			this.width,
-			this.height);
+			this.height,
+			1,
+			'orange');
 
 		this.ball2 =new Ball (
 			this.radius*4,
 			this.width,
 			this.height,
+			.1,
+			'#D0D102',
 
 			document.addEventListener('keydown', event => {
 			if (event.key === KEYS.b) {
@@ -55,8 +59,8 @@ export default class Game {
 		})
 		);
 
-		this.player1Score = new Score(this.width / 2 - 50, 50, 50, 'red')
-		this.player2Score = new Score(this.width / 2 + 25, 50, 50, 'blue')
+		this.player1Score = new Score(this.width / 2 - 100, 50, 50, 'red')
+		this.player2Score = new Score(this.width / 2 + 75, 50, 50, 'blue')
 
 		this.obstacles = new Obstacles(80, 80, this.width/2 - 40, this.height/2 - 40,
 		)
@@ -67,6 +71,7 @@ export default class Game {
 			}
 		})
 	}
+
 
 	render() {
 
