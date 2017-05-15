@@ -25,3 +25,8 @@ A basic pong game using SVGs.
 **Player 2:**
 * ▲ : up
 * ▼: down
+
+**Setting:**
+* "B" to add/remove a bigger ball( this ball has different speed)
+* "Space" to pause game
+* Paddle will grow going up, and strink going down

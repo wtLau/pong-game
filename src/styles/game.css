@@ -30,6 +30,7 @@ footer, header, hgroup, menu, nav, section {
 }
 body {
 	line-height: 1;
+  background-color: goldenrod;
 }
 ol, ul {
 	list-style: none;
@@ -74,7 +75,7 @@ body {
   align-items: center;
   display: flex;
   font-family: 'Silkscreen Web', monotype;
-  height: 100vh;
+  height: 50vh;
   justify-content: center;
   width: 100%;
 }

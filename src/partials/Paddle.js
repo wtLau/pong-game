@@ -9,7 +9,7 @@ export default class Paddle {
     this.y = y;
     this.speed = 20;
     this.score = 0;
-    
+
     document.addEventListener('keydown', event => {
       switch (event.key) {
         case up:
@@ -31,29 +31,29 @@ export default class Paddle {
   }
 
   up() {
-    this.y = Math.max(0,this.y-this.speed);
+    this.y = Math.max(0, this.y - this.speed);
     if (this.y > this.height) {
-    this.height = this.height+4;
+      this.height = this.height + 4;
     }
   }
 
   down() {
-    this.y = Math.min(this.boardHeight- this.height,  this.y+this.speed);
+    this.y = Math.min(this.boardHeight - this.height, this.y + this.speed);
     if (this.height > 20) {
-     this.height = this.height-4;
+      this.height = this.height - 4;
     }
-      
+
   }
 
   render(svg) {
     let rect = document.createElementNS(SVG_NS, 'rect');
-		rect.setAttributeNS(null, 'width', this.width);
-		rect.setAttributeNS(null, 'height', this.height);
+    rect.setAttributeNS(null, 'width', this.width);
+    rect.setAttributeNS(null, 'height', this.height);
     rect.setAttributeNS(null, 'fill', '#FFFFFF');
     rect.setAttributeNS(null, 'x', this.x);
-		rect.setAttributeNS(null, 'y', this.y);
+    rect.setAttributeNS(null, 'y', this.y);
     rect.setAttributeNS(null, 'speed', this.speed);
-    rect.setAttributeNS(null, 'score', this.score);   
+    rect.setAttributeNS(null, 'score', this.score);
 
     svg.appendChild(rect)
   }

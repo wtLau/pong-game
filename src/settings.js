@@ -4,7 +4,7 @@ export const KEYS = {
   a: 'a',        // player 1 up key
   z: 'z',        // player 1 down key
   up: 'ArrowUp',       // player 2 up key
-  down: 'ArrowDown',  
+  down: 'ArrowDown',
   spaceBar: ' ', // we'll use this later...
   b: 'b',
 }
