@@ -63,32 +63,161 @@
 /******/ 	__webpack_require__.p = "";
 /******/
 /******/ 	// Load entry module and return exports
-/******/ 	return __webpack_require__(__webpack_require__.s = 3);
+/******/ 	return __webpack_require__(__webpack_require__.s = 4);
 /******/ })
 /************************************************************************/
 /******/ ([
 /* 0 */
 /***/ (function(module, exports, __webpack_require__) {
 
-module.exports = __webpack_require__.p + "public/fonts/slkscr-webfont.eot";
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+var SVG_NS = exports.SVG_NS = 'http://www.w3.org/2000/svg';
+
+var KEYS = exports.KEYS = {
+  a: 'a', // player 1 up key
+  z: 'z', // player 1 down key
+  up: 'ArrowUp', // player 2 up key
+  down: 'ArrowDown',
+  spaceBar: ' ', // we'll use this later...
+  b: 'b'
+};
 
 /***/ }),
 /* 1 */
-/***/ (function(module, exports) {
+/***/ (function(module, exports, __webpack_require__) {
 
-throw new Error("Module build failed: SyntaxError: Unexpected token (36:1)\n\n\u001b[0m \u001b[90m 34 | \u001b[39m\t\t\t\u001b[33mKEYS\u001b[39m\u001b[33m.\u001b[39mup\u001b[33m,\u001b[39m\n \u001b[90m 35 | \u001b[39m\t\t\t\u001b[33mKEYS\u001b[39m\u001b[33m.\u001b[39mdown\u001b[33m,\u001b[39m\n\u001b[31m\u001b[1m>\u001b[22m\u001b[39m\u001b[90m 36 | \u001b[39m\t}\n \u001b[90m    | \u001b[39m\t\u001b[31m\u001b[1m^\u001b[22m\u001b[39m\n \u001b[90m 37 | \u001b[39m\n \u001b[90m 38 | \u001b[39m\trender() {\n \u001b[90m 39 | \u001b[39m\t\t\u001b[36mthis\u001b[39m\u001b[33m.\u001b[39mgameElement\u001b[33m.\u001b[39minnerHTML\u001b[33m=\u001b[39m\u001b[32m''\u001b[39m\u001b[33m;\u001b[39m\u001b[0m\n");
+module.exports = __webpack_require__.p + "public/fonts/slkscr-webfont.eot";
 
 /***/ }),
 /* 2 */
 /***/ (function(module, exports, __webpack_require__) {
 
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+	value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+var _Board = __webpack_require__(6);
+
+var _Board2 = _interopRequireDefault(_Board);
+
+var _Paddle = __webpack_require__(8);
+
+var _Paddle2 = _interopRequireDefault(_Paddle);
+
+var _Ball = __webpack_require__(5);
+
+var _Ball2 = _interopRequireDefault(_Ball);
+
+var _Score = __webpack_require__(9);
+
+var _Score2 = _interopRequireDefault(_Score);
+
+var _Obstacles = __webpack_require__(7);
+
+var _Obstacles2 = _interopRequireDefault(_Obstacles);
+
+function _interopRequireDefault(obj) { return obj && obj.__esModule ? obj : { default: obj }; }
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Game = function () {
+	function Game(element, width, height) {
+		var _this = this;
+
+		_classCallCheck(this, Game);
+
+		this.width = width;
+		this.height = height;
+
+		this.gameElement = document.getElementById(element);
+
+		this.board = new _Board2.default(this.width, this.height);
+		this.boardGap = 10;
+		this.paddleWidth = 8;
+		this.paddleHeight = 56;
+		this.padding = 10;
+		this.radius = 8;
+
+		this.player1 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.padding, (this.height - this.paddleHeight) / 2, _settings.KEYS.a, _settings.KEYS.z);
+
+		this.player2 = new _Paddle2.default(this.height, this.paddleWidth, this.paddleHeight, this.width - this.paddleWidth - this.padding, (this.height - this.paddleHeight) / 2, _settings.KEYS.up, _settings.KEYS.down);
+
+		this.ball = new _Ball2.default(this.radius, this.width, this.height, 1, 'orange');
+
+		this.ball2 = new _Ball2.default(this.radius * 4, this.width, this.height, .1, '#D0D102', document.addEventListener('keydown', function (event) {
+			if (event.key === _settings.KEYS.b) {
+				_this.addBall = !_this.addBall;
+			}
+		}));
+
+		this.player1Score = new _Score2.default(this.width / 2 - 100, 50, 50, 'red');
+		this.player2Score = new _Score2.default(this.width / 2 + 75, 50, 50, 'blue');
+
+		this.obstacles = new _Obstacles2.default(80, 80, this.width / 2 - 40, this.height / 2 - 40);
+
+		document.addEventListener('keydown', function (event) {
+			if (event.key === _settings.KEYS.spaceBar) {
+				_this.pause = !_this.pause;
+			}
+		});
+	}
+
+	_createClass(Game, [{
+		key: 'render',
+		value: function render() {
+
+			if (this.pause) {
+				return;
+			}
+
+			this.gameElement.innerHTML = '';
+			var svg = document.createElementNS(_settings.SVG_NS, 'svg');
+			svg.setAttributeNS(null, 'width', this.width);
+			svg.setAttributeNS(null, 'height', this.height);
+			svg.setAttributeNS(null, 'viewBox', '0 0 ' + this.width + ' ' + this.height);
+			this.gameElement.appendChild(svg);
+
+			this.board.render(svg);
+			this.player1.render(svg);
+			this.player2.render(svg);
+			this.player1Score.render(svg, this.player1.score);
+			this.player2Score.render(svg, this.player2.score);
+			this.ball.render(svg, this.player1, this.player2);
+			this.obstacles.render(svg);
+			if (this.addBall) {
+				return this.ball2.render(svg, this.player1, this.player2);
+			}
+		}
+	}]);
+
+	return Game;
+}();
+
+exports.default = Game;
+
+/***/ }),
+/* 3 */
+/***/ (function(module, exports, __webpack_require__) {
+
 // style-loader: Adds some css to the DOM by adding a <style> tag
 
 // load the styles
-var content = __webpack_require__(4);
+var content = __webpack_require__(10);
 if(typeof content === 'string') content = [[module.i, content, '']];
 // add the styles to the DOM
-var update = __webpack_require__(9)(content, {});
+var update = __webpack_require__(15)(content, {});
 if(content.locals) module.exports = content.locals;
 // Hot Module Replacement
 if(false) {
@@ -105,15 +234,15 @@ if(false) {
 }
 
 /***/ }),
-/* 3 */
+/* 4 */
 /***/ (function(module, exports, __webpack_require__) {
 
 "use strict";
 
 
-__webpack_require__(2);
+__webpack_require__(3);
 
-var _Game = __webpack_require__(1);
+var _Game = __webpack_require__(2);
 
 var _Game2 = _interopRequireDefault(_Game);
 
@@ -128,21 +257,400 @@ var game = new _Game2.default('game', 512, 256);
 })();
 
 /***/ }),
-/* 4 */
+/* 5 */
 /***/ (function(module, exports, __webpack_require__) {
 
-exports = module.exports = __webpack_require__(5)();
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _slicedToArray = function () { function sliceIterator(arr, i) { var _arr = []; var _n = true; var _d = false; var _e = undefined; try { for (var _i = arr[Symbol.iterator](), _s; !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"]) _i["return"](); } finally { if (_d) throw _e; } } return _arr; } return function (arr, i) { if (Array.isArray(arr)) { return arr; } else if (Symbol.iterator in Object(arr)) { return sliceIterator(arr, i); } else { throw new TypeError("Invalid attempt to destructure non-iterable instance"); } }; }();
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Ball = function () {
+  function Ball(radius, boardWidth, boardHeight, direction, color) {
+    _classCallCheck(this, Ball);
+
+    this.radius = radius;
+    this.boardWidth = boardWidth;
+    this.boardHeight = boardHeight;
+    this.direction = direction;
+    this.color = color;
+    this.ping1 = new Audio('public/sounds/pong-01.wav');
+    this.ping3 = new Audio('public/sounds/pong-03.wav');
+
+    //ball center in board initially
+    this.reset();
+  }
+
+  _createClass(Ball, [{
+    key: 'reset',
+    value: function reset() {
+      this.x = this.boardWidth / 2;
+      this.y = this.boardHeight / 2;
+
+      //generate a random nuber between -5 and 5, that's not 0
+      this.vy = 0;
+      while (this.vy === 0) {
+        this.vy = Math.floor(Math.random() * 10 - 5);
+      }
+
+      //a number between -5 and 5, based on the vy
+      this.vx = this.direction * (6 - Math.abs(this.vy));
+    }
+  }, {
+    key: 'wallCollision',
+    value: function wallCollision() {
+      var hitLeft = this.x - this.radius <= 0;
+      var hitRight = this.x + this.radius >= this.boardWidth;
+      var hitTop = this.y - this.radius <= 0;
+      var hitBottom = this.y + this.radius >= this.boardHeight;
+
+      if (hitLeft || hitRight) {
+        this.vx = -this.vx;
+      } else if (hitTop || hitBottom) {
+        this.vy = -this.vy;
+      }
+    }
+  }, {
+    key: 'paddleCollision',
+    value: function paddleCollision(player1, player2) {
+      //checking if moving toward the right, execute only the right side; vice-versa
+      if (this.vx > 0) {
+        //check for collision on player 2
+        var paddle = player2.coordinates(player2.x, player2.y, player2.width, player2.height);
+
+        var _paddle = _slicedToArray(paddle, 4),
+            leftX = _paddle[0],
+            rightX = _paddle[1],
+            topY = _paddle[2],
+            bottomY = _paddle[3];
+
+        if (this.x + this.radius >= leftX //the right edge of the ball is >= left edge of the paddle
+        && this.x + this.radius <= rightX //&& the right edge of the ball <= right edge of the paddle
+        && this.y + this.radius >= topY //&& the ball Y >= the top edge of the paddle
+        && this.y <= bottomY //&& the ball is <= the bottom edge of the paddle
+        ) {
+            this.vx = -this.vx;
+            this.ping3.play();
+          }
+      } else {
+        var _paddle2 = player1.coordinates(player1.x, player1.y, player1.width, player1.height);
+
+        var _paddle3 = _slicedToArray(_paddle2, 4),
+            _leftX = _paddle3[0],
+            _rightX = _paddle3[1],
+            _topY = _paddle3[2],
+            _bottomY = _paddle3[3];
+
+        if (this.x - this.radius >= _leftX && this.x - this.radius <= _rightX && this.y + this.radius >= _topY && this.y <= _bottomY) {
+          this.vx = -this.vx;
+          this.ping1.play();
+        }
+        // check for collision on player 1
+      }
+    }
+  }, {
+    key: 'goal',
+    value: function goal(player) {
+      player.score++;
+      this.reset();
+    }
+  }, {
+    key: 'render',
+    value: function render(svg, player1, player2) {
+      this.x += this.vx;
+      this.y += this.vy;
+
+      this.wallCollision();
+      this.paddleCollision(player1, player2);
+
+      var circle = document.createElementNS(_settings.SVG_NS, 'circle');
+      circle.setAttributeNS(null, 'r', this.radius);
+      circle.setAttributeNS(null, 'fill', this.color);
+      circle.setAttributeNS(null, 'cx', this.x);
+      circle.setAttributeNS(null, 'cy', this.y);
+      svg.appendChild(circle);
+
+      //detect goal
+      var rightGoal = this.x + this.radius >= this.boardWidth;
+      var leftGoal = this.x - this.radius <= 0;
+
+      if (rightGoal) {
+        this.goal(player1);
+        this.direction = 1;
+      } else if (leftGoal) {
+        this.goal(player2);
+        this.direction = -1;
+      }
+    }
+  }]);
+
+  return Ball;
+}();
+
+exports.default = Ball;
+
+/***/ }),
+/* 6 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Board = function () {
+  function Board(width, height) {
+    _classCallCheck(this, Board);
+
+    this.width = width;
+    this.height = height;
+  }
+
+  _createClass(Board, [{
+    key: 'render',
+    value: function render(svg) {
+      var rect = document.createElementNS(_settings.SVG_NS, 'rect');
+      rect.setAttributeNS(null, 'width', this.width);
+      rect.setAttributeNS(null, 'height', this.height);
+      rect.setAttributeNS(null, 'fill', '#353535');
+
+      var line = document.createElementNS(_settings.SVG_NS, 'line');
+      line.setAttributeNS(null, 'width', this.width);
+      line.setAttributeNS(null, 'height', this.height);
+      line.setAttributeNS(null, 'x1', this.width / 2);
+      line.setAttributeNS(null, 'y1', '0');
+      line.setAttributeNS(null, 'x2', this.width / 2);
+      line.setAttributeNS(null, 'y2', this.height);
+      line.setAttributeNS(null, 'stroke-dasharray', '20, 15');
+      line.setAttributeNS(null, 'stroke-width', '4');
+      line.setAttributeNS(null, 'stroke', '#FFFFFF');
+
+      svg.appendChild(rect);
+      svg.appendChild(line);
+    }
+  }]);
+
+  return Board;
+}();
+
+exports.default = Board;
+
+/***/ }),
+/* 7 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Obstacles = function () {
+  function Obstacles(width, height, x, y) {
+    _classCallCheck(this, Obstacles);
+
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+  }
+
+  _createClass(Obstacles, [{
+    key: 'render',
+    value: function render(svg) {
+      var rect = document.createElementNS(_settings.SVG_NS, 'rect');
+      rect.setAttributeNS(null, 'width', this.width);
+      rect.setAttributeNS(null, 'height', this.height);
+      rect.setAttributeNS(null, 'fill', '#FFFFFF');
+      rect.setAttributeNS(null, 'x', this.x);
+      rect.setAttributeNS(null, 'y', this.y);
+
+      svg.appendChild(rect);
+    }
+  }]);
+
+  return Obstacles;
+}();
+
+exports.default = Obstacles;
+
+/***/ }),
+/* 8 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Paddle = function () {
+  function Paddle(boardHeight, width, height, x, y, up, down) {
+    var _this = this;
+
+    _classCallCheck(this, Paddle);
+
+    this.boardHeight = boardHeight;
+    this.width = width;
+    this.height = height;
+    this.x = x;
+    this.y = y;
+    this.speed = 20;
+    this.score = 0;
+
+    document.addEventListener('keydown', function (event) {
+      switch (event.key) {
+        case up:
+          _this.up();
+          break;
+        case down:
+          _this.down();
+          break;
+      }
+    });
+  }
+
+  _createClass(Paddle, [{
+    key: 'coordinates',
+    value: function coordinates(x, y, width, height) {
+      var leftX = x;
+      var rightX = x + width;
+      var topY = y;
+      var bottomY = y + height;
+      return [leftX, rightX, topY, bottomY];
+    }
+  }, {
+    key: 'up',
+    value: function up() {
+      this.y = Math.max(0, this.y - this.speed);
+      if (this.y > this.height) {
+        this.height = this.height + 4;
+      }
+    }
+  }, {
+    key: 'down',
+    value: function down() {
+      this.y = Math.min(this.boardHeight - this.height, this.y + this.speed);
+      if (this.height > 20) {
+        this.height = this.height - 4;
+      }
+    }
+  }, {
+    key: 'render',
+    value: function render(svg) {
+      var rect = document.createElementNS(_settings.SVG_NS, 'rect');
+      rect.setAttributeNS(null, 'width', this.width);
+      rect.setAttributeNS(null, 'height', this.height);
+      rect.setAttributeNS(null, 'fill', '#FFFFFF');
+      rect.setAttributeNS(null, 'x', this.x);
+      rect.setAttributeNS(null, 'y', this.y);
+      rect.setAttributeNS(null, 'speed', this.speed);
+      rect.setAttributeNS(null, 'score', this.score);
+
+      svg.appendChild(rect);
+    }
+  }]);
+
+  return Paddle;
+}();
+
+exports.default = Paddle;
+
+/***/ }),
+/* 9 */
+/***/ (function(module, exports, __webpack_require__) {
+
+"use strict";
+
+
+Object.defineProperty(exports, "__esModule", {
+  value: true
+});
+
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
+
+var _settings = __webpack_require__(0);
+
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Score = function () {
+  function Score(x, y, size, color) {
+    _classCallCheck(this, Score);
+
+    this.x = x;
+    this.y = y;
+    this.size = size;
+    this.color = color;
+  }
+
+  _createClass(Score, [{
+    key: 'render',
+    value: function render(svg, score) {
+
+      var text = document.createElementNS(_settings.SVG_NS, 'text');
+      text.setAttributeNS(null, 'fill', this.color);
+      text.setAttributeNS(null, 'x', this.x);
+      text.setAttributeNS(null, 'y', this.y);
+      text.setAttributeNS(null, 'font-family', 'Silkscreen Web, monotype');
+      text.setAttributeNS(null, 'font-size', this.size);
+      text.textContent = score;
+      svg.appendChild(text);
+    }
+  }]);
+
+  return Score;
+}();
+
+exports.default = Score;
+
+/***/ }),
+/* 10 */
+/***/ (function(module, exports, __webpack_require__) {
+
+exports = module.exports = __webpack_require__(11)();
 // imports
 
 
 // module
-exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed, \nfigure, figcaption, footer, header, hgroup, \nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure, \nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n\n/**\n * FONTS\n */\n\n@font-face {\n  font-family: 'Silkscreen Web';\n  src: url(" + __webpack_require__(0) + ");\n  src: url(" + __webpack_require__(0) + "?#iefix) format('embedded-opentype'),\n    url(" + __webpack_require__(8) + ") format('woff'),\n    url(" + __webpack_require__(7) + ") format('truetype'),\n    url(" + __webpack_require__(6) + "#silkscreennormal) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n\n/**\n * GAME\n */\n\nhtml {\n  font-size: 16px;\n}\n\nbody {\n  align-items: center;\n  display: flex;\n  font-family: 'Silkscreen Web', monotype;\n  height: 100vh;\n  justify-content: center;\n  width: 100%;\n}\n\nh1 {\n  font-size: 2.5rem;\n  margin-bottom: 1rem; \n  text-align: center;\n}\n", ""]);
+exports.push([module.i, "/* http://meyerweb.com/eric/tools/css/reset/ \n   v2.0 | 20110126\n   License: none (public domain)\n*/\n\nhtml, body, div, span, applet, object, iframe,\nh1, h2, h3, h4, h5, h6, p, blockquote, pre,\na, abbr, acronym, address, big, cite, code,\ndel, dfn, em, img, ins, kbd, q, s, samp,\nsmall, strike, strong, sub, sup, tt, var,\nb, u, i, center,\ndl, dt, dd, ol, ul, li,\nfieldset, form, label, legend,\ntable, caption, tbody, tfoot, thead, tr, th, td,\narticle, aside, canvas, details, embed, \nfigure, figcaption, footer, header, hgroup, \nmenu, nav, output, ruby, section, summary,\ntime, mark, audio, video {\n\tmargin: 0;\n\tpadding: 0;\n\tborder: 0;\n\tfont-size: 100%;\n\tfont: inherit;\n\tvertical-align: baseline;\n}\n/* HTML5 display-role reset for older browsers */\narticle, aside, details, figcaption, figure, \nfooter, header, hgroup, menu, nav, section {\n\tdisplay: block;\n}\nbody {\n\tline-height: 1;\n  background-color: goldenrod;\n}\nol, ul {\n\tlist-style: none;\n}\nblockquote, q {\n\tquotes: none;\n}\nblockquote:before, blockquote:after,\nq:before, q:after {\n\tcontent: '';\n\tcontent: none;\n}\ntable {\n\tborder-collapse: collapse;\n\tborder-spacing: 0;\n}\n\n/**\n * FONTS\n */\n\n@font-face {\n  font-family: 'Silkscreen Web';\n  src: url(" + __webpack_require__(1) + ");\n  src: url(" + __webpack_require__(1) + "?#iefix) format('embedded-opentype'),\n    url(" + __webpack_require__(14) + ") format('woff'),\n    url(" + __webpack_require__(13) + ") format('truetype'),\n    url(" + __webpack_require__(12) + "#silkscreennormal) format('svg');\n  font-weight: normal;\n  font-style: normal;\n}\n\n/**\n * GAME\n */\n\nhtml {\n  font-size: 16px;\n}\n\nbody {\n  align-items: center;\n  display: flex;\n  font-family: 'Silkscreen Web', monotype;\n  /*height: 50vh;*/\n  justify-content: center;\n  width: 100%;\n}\n\nh1 {\n  font-size: 2.5rem;\n  margin-bottom: 1rem; \n  text-align: center;\n}\n", ""]);
 
 // exports
 
 
 /***/ }),
-/* 5 */
+/* 11 */
 /***/ (function(module, exports) {
 
 /*
@@ -198,25 +706,25 @@ module.exports = function() {
 
 
 /***/ }),
-/* 6 */
+/* 12 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "public/fonts/slkscr-webfont.svg";
 
 /***/ }),
-/* 7 */
+/* 13 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "public/fonts/slkscr-webfont.ttf";
 
 /***/ }),
-/* 8 */
+/* 14 */
 /***/ (function(module, exports, __webpack_require__) {
 
 module.exports = __webpack_require__.p + "public/fonts/slkscr-webfont.woff";
 
 /***/ }),
-/* 9 */
+/* 15 */
 /***/ (function(module, exports) {
 
 /*
